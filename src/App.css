@@ -180,3 +180,26 @@ form {
   align-items: flex-start;
   justify-content: center;
 }
+
+.personal-reply-icons {
+  width: 90%;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  margin: 10px;
+}
+
+.delete-edit-wrapp {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-evenly;
+  width: 30%;
+}
+
+.delete-edit-wrapp img {
+  height: 30px;
+  width: auto;
+  cursor: pointer;
+}

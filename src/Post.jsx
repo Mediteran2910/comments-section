@@ -11,6 +11,49 @@ export default function Post() {
     setReplyingTo((prevReply) => (prevReply === userId ? null : userId));
   };
 
+  const [comments, setComments] = useState([]);
+
+  const repliesArr = [
+    {
+      user: currentUser.username,
+      text: "",
+      createdAt: "just now",
+      img: currentUser.image.png,
+      score: 0,
+    },
+  ];
+  console.log(repliesArr);
+
+  const handleAddReply = (content) => {
+    const newReply = {
+      user: currentUser.username, // You can modify this to be dynamic based on the user
+      text: content,
+      createdAt: "just now",
+      img: currentUser.image.png, // You can replace this with dynamic time if needed
+      score: 0,
+    };
+    // Log the new reply
+    console.log("New Reply:", newReply);
+
+    // Update comments state with the new reply
+    setComments((prevComments) => [...prevComments, newReply]);
+    console.log("Updated comments:", [...comments, newReply]); // Log the updated comments array
+  };
+
+  const handleDelete = (index) => {
+    setComments((prevComments) =>
+      prevComments.filter((_, idx) => idx !== index)
+    );
+  };
+
+  const [isEditActive, setIsEditActive] = useState(false);
+
+  const handleEdit = (idx) => {
+    console.log(isEditActive);
+    setIsEditActive((prevIsEditActive) => !prevIsEditActive);
+    console.log(`its clicked, ${idx}, ${isEditActive}`);
+  };
+
   return (
     <div>
       {otherUsers.map((user) => (
@@ -24,9 +67,18 @@ export default function Post() {
           {replyingTo === user.id && (
             <ReplyText
               user={user} // Pass user data to ReplyText
+              handleAddReply={handleAddReply}
+              setReplyingTo={setReplyingTo}
             />
           )}
-          <Replies user={user} />
+          <Replies
+            user={user}
+            handleAddReply={handleAddReply}
+            comments={comments}
+            handleDelete={handleDelete}
+            handleEdit={handleEdit}
+            isEditActive={isEditActive}
+          />
         </div>
       ))}
     </div>

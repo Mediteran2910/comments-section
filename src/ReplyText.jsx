@@ -1,12 +1,18 @@
 import { useState } from "react";
 import { currentUser } from "./Info";
 
-export default function ReplyText({ user, reply, handleAddReply }) {
-  const initialReplyText = `${
+export default function ReplyText({
+  user,
+  reply,
+  handleAddReply,
+  setReplying,
+  setReplyingTo,
+  replyText,
+  setReplyText,
+}) {
+  const initialReplyText = `@${
     reply ? reply.user.username : user.user.username
   }`;
-
-  const [replyText, setReplyText] = useState(initialReplyText);
 
   const handleInput = (evt) => {
     setReplyText(evt.target.value);
@@ -14,6 +20,10 @@ export default function ReplyText({ user, reply, handleAddReply }) {
 
   const handleSubmit = (evt) => {
     evt.preventDefault();
+    handleAddReply(replyText);
+    setReplyText(initialReplyText);
+    setReplying ? setReplying(null) : setReplyingTo(null);
+
     // You can add additional logic here, like calling `handleAddReply(replyText)`
   };
 
@@ -27,7 +37,9 @@ export default function ReplyText({ user, reply, handleAddReply }) {
             className="reply-textarea"
             value={replyText}
             onChange={handleInput}
-          />
+          >
+            <span>{initialReplyText}</span>
+          </textarea>
           <button>REPLY</button>
         </form>
       </div>
