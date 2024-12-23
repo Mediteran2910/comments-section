@@ -11,19 +11,19 @@ export default function Replies({
   handleDelete,
   handleEdit,
   isEditActive,
+  replyText,
+  setReplyText,
+  editComment,
+  idx,
 }) {
   const [replies, setReplying] = useState(null);
 
   const handleReply = (replyId) => {
-    console.log("its clicked");
+    console.log("reply of id", replyId);
     setReplying((prevReply) => (prevReply === replyId ? null : replyId));
   };
 
-  const [replyText, setReplyText] = useState("");
-
-  const handleInput = (evt) => {
-    setReplyText(evt.target.value);
-  };
+  let cryptoKey = crypto.randomUUID();
 
   return (
     <>
@@ -32,13 +32,21 @@ export default function Replies({
           <div className="replies-container" key={uuidv4()}>
             <UserReply
               reply={reply}
-              key={uuidv4()}
               handleReply={() => handleReply(reply.id)}
               comments={comments}
             />
           </div>
           {isEditActive ? (
-            <ReplyText user={user} replyText="i hate you" />
+            <ReplyText
+              user={user}
+              handleAddReply={handleAddReply}
+              replyText={comments[idx].text} // State from parent
+              setReplyText={setReplyText} // Update function from parent
+              handleEditSave={() => editComment(idx, replyText)}
+              isEditActive={isEditActive}
+              comments={comments}
+              idx={idx}
+            />
           ) : (
             <PersonalReply
               comments={comments}
@@ -52,9 +60,13 @@ export default function Replies({
               reply={reply}
               user={user}
               handleAddReply={handleAddReply}
-              setReplying={setReplying}
-              replyText={initialReplyText}
+              replyText={replyText}
               setReplyText={setReplyText}
+              setReplying={setReplying}
+              handleEditSave={() => editComment(idx, replyText)}
+              isEditActive={isEditActive}
+              comments={comments}
+              idx={idx}
             />
           )}
         </>
@@ -62,5 +74,3 @@ export default function Replies({
     </>
   );
 }
-
-//

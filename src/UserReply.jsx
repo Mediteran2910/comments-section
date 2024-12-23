@@ -23,7 +23,10 @@ export default function UserReply({ reply, handleReply }) {
             </div>
           </div>
 
-          <p>{`@${reply.replyingTo} + ${reply.content}`}</p>
+          <p>
+            <span style={{ color: "purple" }}>@{reply.replyingTo}</span>{" "}
+            {reply.content}
+          </p>
           <div className="likeReplyWrapp">
             <Likes initialLikes={reply.score} />
             <ReplyBtn handleReply={() => handleReply(reply.id)} />

@@ -8,21 +8,11 @@ export default function Post() {
   const [replyingTo, setReplyingTo] = useState(null); // Track which user is being replied to
 
   const handleToggle = (userId) => {
+    console.log("reply od id", userId);
     setReplyingTo((prevReply) => (prevReply === userId ? null : userId));
   };
 
   const [comments, setComments] = useState([]);
-
-  const repliesArr = [
-    {
-      user: currentUser.username,
-      text: "",
-      createdAt: "just now",
-      img: currentUser.image.png,
-      score: 0,
-    },
-  ];
-  console.log(repliesArr);
 
   const handleAddReply = (content) => {
     const newReply = {
@@ -48,10 +38,29 @@ export default function Post() {
 
   const [isEditActive, setIsEditActive] = useState(false);
 
+  const [editIdx, setEditIdx] = useState(null);
+
   const handleEdit = (idx) => {
-    console.log(isEditActive);
-    setIsEditActive((prevIsEditActive) => !prevIsEditActive);
-    console.log(`its clicked, ${idx}, ${isEditActive}`);
+    console.log("Editing comment at index:", idx);
+    const comment = comments[idx];
+    if (comment) {
+      setEditIdx(idx);
+      setReplyText(comment.text); // Set the current comment text to replyText
+      setIsEditActive(true); // Activate edit mode
+    }
+  };
+
+  const [replyText, setReplyText] = useState("");
+
+  const editComment = (idx, newText) => {
+    setComments((prevComments) =>
+      prevComments.map((comment, index) =>
+        index === idx ? { ...comment, text: newText } : comment
+      )
+    );
+
+    setReplyText(""); // Clear the text field after submission
+    setIsEditActive(false); // Deactivate edit mode
   };
 
   return (
@@ -69,6 +78,10 @@ export default function Post() {
               user={user} // Pass user data to ReplyText
               handleAddReply={handleAddReply}
               setReplyingTo={setReplyingTo}
+              replyText={replyText}
+              setReplyText={setReplyText}
+              editComment={editComment}
+              isEditActive={isEditActive}
             />
           )}
           <Replies
@@ -78,6 +91,10 @@ export default function Post() {
             handleDelete={handleDelete}
             handleEdit={handleEdit}
             isEditActive={isEditActive}
+            replyText={replyText}
+            setReplyText={setReplyText}
+            editComment={editComment}
+            idx={editIdx}
           />
         </div>
       ))}
