@@ -3,6 +3,7 @@ import { otherUsers, currentUser } from "./Info";
 import UserInfo from "./UserInfo";
 import Replies from "./Replies";
 import ReplyText from "./ReplyText";
+import PersonalReply from "./PersonalReply";
 
 export default function Post() {
   const [replyingTo, setReplyingTo] = useState(null); // Track which user is being replied to
@@ -15,7 +16,7 @@ export default function Post() {
   const [comments, setComments] = useState([]);
 
   const handleAddReply = (content) => {
-    const newReply = {
+    let newReply = {
       user: currentUser.username, // You can modify this to be dynamic based on the user
       text: content,
       createdAt: "just now",
@@ -40,6 +41,9 @@ export default function Post() {
 
   const [editIdx, setEditIdx] = useState(null);
 
+  const [replyText, setReplyText] = useState("");
+
+  // Handle Edit mode - Initialize replyText when starting to edit
   const handleEdit = (idx) => {
     console.log("Editing comment at index:", idx);
     const comment = comments[idx];
@@ -49,8 +53,6 @@ export default function Post() {
       setIsEditActive(true); // Activate edit mode
     }
   };
-
-  const [replyText, setReplyText] = useState("");
 
   const editComment = (idx, newText) => {
     setComments((prevComments) =>
@@ -71,6 +73,15 @@ export default function Post() {
             user={user}
             handleToggle={() => handleToggle(user.id)} // Pass toggleReply function to UserInfo
           />
+          {/* Render PersonalReply under the specific UserInfo if replying to this user */}
+          {replyingTo === user.id && (
+            <PersonalReply
+              comments={comments}
+              handleDelete={handleDelete}
+              handleEdit={handleEdit}
+              isEditActive={isEditActive}
+            />
+          )}
 
           {/* Render ReplyText directly under the appropriate post */}
           {replyingTo === user.id && (

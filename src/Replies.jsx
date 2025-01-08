@@ -29,7 +29,7 @@ export default function Replies({
     <>
       {user.replies.map((reply) => (
         <>
-          <div className="replies-container" key={uuidv4()}>
+          <div className="replies-container" key={reply.id}>
             <UserReply
               reply={reply}
               handleReply={() => handleReply(reply.id)}
@@ -40,8 +40,9 @@ export default function Replies({
             <ReplyText
               user={user}
               handleAddReply={handleAddReply}
-              replyText={comments[idx].text} // State from parent
+              replyText={replyText} // State from parent
               setReplyText={setReplyText} // Update function from parent
+              setReplying={setReplying}
               handleEditSave={() => editComment(idx, replyText)}
               isEditActive={isEditActive}
               comments={comments}
